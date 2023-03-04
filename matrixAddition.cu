@@ -11,7 +11,8 @@ __global__ void addMatrix(const Matrix a, const Matrix b, Matrix c)
     int col = blockDim.x * blockIdx.x + threadIdx.x;
     int row = blockDim.y * blockIdx.y + threadIdx.y;
 
-    c.elements[row * c.width + col] = a.elements[row * a.width + col] + b.elements[row * b.width + col];
+    if(col < c.width && row < c.height)
+        c.elements[row * c.width + col] = a.elements[row * a.width + col] + b.elements[row * b.width + col];
 }
 
 int main()
