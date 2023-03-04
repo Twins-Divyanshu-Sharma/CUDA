@@ -11,12 +11,16 @@ __global__ void naive_matMul(const Matrix a, const Matrix b, Matrix c)
 {
     int col = blockDim.x * blockIdx.x + threadIdx.x;
     int row = blockDim.y * blockIdx.y + threadIdx.y;
+    
+    if(col<c.cols && row<c.rows)
+    {
+        float cValue = 0;
+        for(int i=0; i<a.cols; i++)
+            cValue += a.data[row * a.cols + i] * b.data[i * b.cols + col];
 
-    float cValue = 0;
-    for(int i=0; i<a.cols; i++)
-        cValue += a.data[row * a.cols + i] * b.data[i * b.cols + col];
-
-    c.data[row * c.cols + col] = cValue;
+        c.data[row * c.cols + col] = cValue;
+    }
+    
 }
 
 int main()
